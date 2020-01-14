@@ -29,9 +29,10 @@
 
 import axios from 'axios'
 import {langs} from '../consts/langs'
+import {serverConfig} from '../consts/server'
 
 export default {
-  name: 'Button',
+  name: 'Search',
   data() {
     return {
         searchUrl: 'https://api.github.com/search/repositories',
@@ -81,7 +82,6 @@ export default {
             new_data.repos.push({
                  'id': repo.id,
                  'name': repo.name,
-                //  'description': repo.description,
                  'stargazers_count': repo.stargazers_count,
                  'html_url': repo.html_url
             })
@@ -89,9 +89,9 @@ export default {
         return new_data
     },
     saveRepos: function(data) {
-        axios.post('http://localhost:8080/', this.shapeDataForDB(data))
+        axios.post(`http://${serverConfig.HOST}:${serverConfig.PORT}/`, this.shapeDataForDB(data))
         .then(res => {
-            console.log(res)
+            console.log(res) // no handling now, just log the output
         })
         .catch(e => {
             console.log(e)

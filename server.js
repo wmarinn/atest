@@ -6,14 +6,14 @@ const path = require('path')
 const serveStatic = require('serve-static')
 
 // Constants
-const PORT = process.env.PORT || 443
+const PORT = process.env.PORT || 5000
 const HOST = '0.0.0.0'
 
 const con = mysql.createConnection({
-  host: "us-cdbr-iron-east-05.cleardb.net",
-  user: "b2410c064cd71a",
-  password: "05e06185",
-  database: "heroku_d98b70fed13d7b3"
+  host: process.env.APP_ENV === 'dev' ? "db" : "us-cdbr-iron-east-05.cleardb.net",
+  user: process.env.APP_ENV === 'dev' ? "user" : "b2410c064cd71a",
+  password: process.env.APP_ENV === 'dev' ? "123456" : "05e06185",
+  database: process.env.APP_ENV === 'dev' ? "test_db" : "heroku_d98b70fed13d7b3"
 })
 
 con.connect(function(err) {
@@ -89,5 +89,6 @@ function insertRepo(table, repos) {
 }
 
 
-app.listen(PORT, HOST)
-console.log(`Running on http://${HOST}:${PORT}`)
+app.listen(PORT, HOST, () => {
+  console.log(`Running on port ${PORT}`)
+})

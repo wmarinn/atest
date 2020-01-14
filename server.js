@@ -10,10 +10,10 @@ const PORT = 8080
 const HOST = '0.0.0.0'
 
 const con = mysql.createConnection({
-  host: "db",
-  user: "user",
-  password: "123456",
-  database: "test_db"
+  host: "us-cdbr-iron-east-05.cleardb.net",
+  user: "b2410c064cd71a",
+  password: "05e06185",
+  database: "heroku_d98b70fed13d7b3"
 })
 
 con.connect(function(err) {

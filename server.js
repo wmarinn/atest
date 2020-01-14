@@ -1,11 +1,13 @@
-'use strict';
+'use strict'
 
-const express = require('express');
-const mysql = require('mysql');
+const express = require('express')
+const mysql = require('mysql')
+const path = require('path')
+const serveStatic = require('serve-static')
 
 // Constants
-const PORT = 8080;
-const HOST = '0.0.0.0';
+const PORT = 8080
+const HOST = '0.0.0.0'
 
 const con = mysql.createConnection({
   host: "db",
@@ -15,29 +17,20 @@ const con = mysql.createConnection({
 })
 
 con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
+  if (err) console.log(err)//throw err
+  console.log("Connected!")
 })
 
 
 
 // App
 const app = express()
+app.use(serveStatic(path.join(__dirname, 'dist')))
 app.use(express.json())
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
-})
-
-app.get('/', (req, res) => { // get all records
-  con.query("SELECT * FROM test1", (err, result, fields) => {
-    if (err) {
-      console.log(err)
-      return res.send('Error getting records')
-    }
-    res.send(result)
-  })
 })
 
 /**

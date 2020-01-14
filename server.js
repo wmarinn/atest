@@ -6,7 +6,7 @@ const path = require('path')
 const serveStatic = require('serve-static')
 
 // Constants
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT
 const HOST = '0.0.0.0'
 
 const con = mysql.createConnection({

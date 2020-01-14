@@ -1,6 +1,5 @@
 const serverConfig = {
-    PORT: process.env.PORT || 5000,
-    HOST: '0.0.0.0'
+    apiAddr: process.env.NODE_ENV === 'development' ? `http://0.0.0.0:8080` : `https://0.0.0.0:${process.env.PORT}`
 }
 
 module.exports = {serverConfig}

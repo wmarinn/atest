@@ -89,7 +89,7 @@ export default {
         return new_data
     },
     saveRepos: function(data) {
-        axios.post(`http://${serverConfig.HOST}:${serverConfig.PORT}/`, this.shapeDataForDB(data))
+        axios.post(serverConfig.apiAddr, this.shapeDataForDB(data))
         .then(res => {
             console.log(res) // no handling now, just log the output
         })

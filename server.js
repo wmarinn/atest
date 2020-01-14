@@ -16,9 +16,19 @@ const con = mysql.createConnection({
   database: process.env.APP_ENV === 'dev' ? "test_db" : "heroku_d98b70fed13d7b3"
 })
 
-con.connect(function(err) {
-  if (err) console.log(err)//throw err
-  console.log("Connected!")
+function connectDB() {
+  con.connect(function(err) {
+    if (err) console.log(err)//throw err
+    console.log("Connected!")
+  })
+}
+
+con.on('error', (err) => {
+  if(!err.fatal) return
+
+  if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+    connectDB()
+  }
 })
 
 
@@ -91,4 +101,5 @@ function insertRepo(table, repos) {
 
 app.listen(PORT, HOST, () => {
   console.log(`Running on port ${PORT}`)
+  connectDB()
 })

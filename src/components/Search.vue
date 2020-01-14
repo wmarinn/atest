@@ -42,9 +42,6 @@ export default {
     }
   },
   methods: {
-      test: function() {
-          console.log(this.checkedLangs)
-      },
     searchRepo: function() {
         if(this.checkedLangs.length != 5) {
             alert('Please select 5 languages.')
@@ -89,7 +86,6 @@ export default {
         return new_data
     },
     saveRepos: function(data) {
-        console.log(process.env.PORT)
         axios.post(`${serverConfig.protocol}://localhost:${process.env.PORT}`, this.shapeDataForDB(data))
         .then(res => {
             console.log(res) // no handling now, just log the output

@@ -87,7 +87,7 @@ export default {
     },
     saveRepos: function(data) {
         console.log(process.env)
-        axios.post(`${serverConfig.protocol}://localhost:${process.env.PORT}`, this.shapeDataForDB(data))
+        axios.post(`${serverConfig.protocol}://localhost:${process.env.VUE_APP_API_PORT}`, this.shapeDataForDB(data))
         .then(res => {
             console.log(res) // no handling now, just log the output
         })

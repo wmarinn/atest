@@ -89,8 +89,8 @@ export default {
         return new_data
     },
     saveRepos: function(data) {
-        console.log(process.env, serverConfig)
-        axios.post(serverConfig.apiAddr, this.shapeDataForDB(data))
+        console.log(process.env.PORT)
+        axios.post(`${serverConfig.protocol}://localhost:${process.env.PORT}`, this.shapeDataForDB(data))
         .then(res => {
             console.log(res) // no handling now, just log the output
         })

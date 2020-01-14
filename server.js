@@ -9,6 +9,8 @@ const serveStatic = require('serve-static')
 const PORT = process.env.PORT
 const HOST = '0.0.0.0'
 
+process.env.VUE_APP_PORT = PORT // little trick so vue can see the env var
+
 const con = mysql.createConnection({
   host: process.env.APP_ENV === 'dev' ? "db" : "us-cdbr-iron-east-05.cleardb.net",
   user: process.env.APP_ENV === 'dev' ? "user" : "b2410c064cd71a",

@@ -63,7 +63,7 @@ app.use(function(req, res, next) { // not good since basically allows CSRF, but 
  */
 app.post('/', (req, res) => {
   if(!req.body.lang) // simple check
-    return res.send('Incorrect data format')
+    return res.send({msg: 'Incorrect data format'})
 
   let sql_create_table = "CREATE TABLE " + req.body.lang +
                 "(id int not null primary key, " +
@@ -87,11 +87,11 @@ app.post('/', (req, res) => {
     insertRepo(req.body.lang, req.body.repos)
     .then(data => {
       console.log(data)
-      res.send('OK')
+      res.send({msg: 'OK'})
     })
     .catch(err => {
       console.log(err)
-      res.send('write error')
+      res.send({msg: 'write error'})
     })
 
   })

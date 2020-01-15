@@ -4,13 +4,17 @@ var chaiHttp = require('chai-http')
 
 chai.use(chaiHttp)
 
+var should = chai.should()
+
 it('post with incorrect data', done => {
     chai.request(server)
     .post('')
     .end((err, res) => {
+        console.log(res)
         res.should.have.status(200)
-        res.body.should.be.a('string')
-        res.body.should.be('Incorrect data format')
+        res.should.be.json
+        res.body.should.be.a('object')
+        res.body.msg.should.be.equal('Incorrect data format')
         done()
     })
 })

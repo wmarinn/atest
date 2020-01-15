@@ -9,6 +9,7 @@ it('post with incorrect data', done => {
     .post('')
     .end((err, res) => {
         res.should.have.status(200)
+        res.body.should.be.a('string')
         res.body.should.be('Incorrect data format')
         done()
     })

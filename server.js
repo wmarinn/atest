@@ -123,6 +123,8 @@ function insertRepo(table, repos) {
 }
 
 
-app.listen(PORT, HOST, () => {
+let server = app.listen(PORT, HOST, () => {
   console.log(`Running on port ${PORT}`)
 })
+
+module.exports = server

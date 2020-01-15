@@ -9,34 +9,41 @@ const serveStatic = require('serve-static')
 const PORT = process.env.PORT
 const HOST = '0.0.0.0'
 
+// DB
 let con = createConnection()
 
 function createConnection() {
-  let con = mysql.createConnection({
+  return mysql.createConnection({
     host: process.env.APP_ENV === 'dev' ? "db" : "us-cdbr-iron-east-05.cleardb.net",
     user: process.env.APP_ENV === 'dev' ? "user" : "b2410c064cd71a",
     password: process.env.APP_ENV === 'dev' ? "123456" : "05e06185",
     database: process.env.APP_ENV === 'dev' ? "test_db" : "heroku_d98b70fed13d7b3"
   })
-  return con
 }
 
 function connectDB() {
   con.connect(function(err) {
-    if (err) console.log(err)//throw err
+    if (err) console.log(err)
     console.log("Connected!")
   })
 }
 
-con.on('error', (err) => {
-  if(!err.fatal) return
+function handleError() {
+  con.on('error', (err) => {
+    if(!err.fatal) return
+  
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+      console.log('Attempting to reconnect to DB...')
+      con = createConnection() // refresh connection object
+      handleError() // Re-bind the error handling to new object
+      connectDB() // try to connect again
+    }
+  })
 
-  if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-    con = createConnection() // refresh connection object
-    connectDB() // try to connect again
-  }
-})
+}
 
+handleError()
+connectDB()
 
 
 // App
@@ -118,5 +125,4 @@ function insertRepo(table, repos) {
 
 app.listen(PORT, HOST, () => {
   console.log(`Running on port ${PORT}`)
-  connectDB()
 })

@@ -61,9 +61,9 @@ app.post('/', (req, res) => {
   let sql_create_table = "CREATE TABLE " + req.body.lang +
                 "(id int not null primary key, " +
                 "name varchar(100) not null, " +
-                // "description varchar(500), " +
                 "star_count int not null, " +
-                "url varchar(200) not null)"
+                "url varchar(200) not null, " +
+                "created_at timestamp not null)"
   con.query(sql_create_table, (err, result) => {
     if(err)
       if(err.code === 'ER_TABLE_EXISTS_ERROR')

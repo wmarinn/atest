@@ -9,8 +9,6 @@ const serveStatic = require('serve-static')
 const PORT = process.env.PORT
 const HOST = '0.0.0.0'
 
-process.env.VUE_APP_PORT = PORT // little trick so vue can see the env var
-
 let con = createConnection()
 
 function createConnection() {
@@ -45,7 +43,7 @@ con.on('error', (err) => {
 const app = express()
 app.use(serveStatic(path.join(__dirname, 'dist')))
 app.use(express.json())
-app.use(function(req, res, next) {
+app.use(function(req, res, next) { // not good since basically allows CSRF, but i'm using for testing dev
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -80,6 +78,14 @@ app.post('/', (req, res) => {
         console.log(result)
 
     insertRepo(req.body.lang, req.body.repos)
+    .then(data => {
+      console.log(data)
+      res.send('OK')
+    })
+    .catch(err => {
+      console.log(err)
+      res.send('write error')
+    })
 
   })
 })
@@ -87,22 +93,25 @@ app.post('/', (req, res) => {
 function insertRepo(table, repos) {
   let sql_insert = 'INSERT INTO ' + table + ' (id, name, url, star_count) VALUES ?'
   let values = []
-  repos.forEach(repo => {
-    let repo_values = [
-      repo.id,
-      repo.name,
-      // repo.description,
-      repo.html_url,
-      repo.stargazers_count
-    ]
-    values.push(repo_values)
-  });
-  con.query(sql_insert, [values], (err, result) => {
-    if(err) {
-      console.log(err)
-      return 0
-    }
-    return result
+  return new Promise((resolve, reject) => {
+    repos.forEach(repo => {
+      let repo_values = [
+        repo.id,
+        repo.name,
+        // repo.description,
+        repo.html_url,
+        repo.stargazers_count
+      ]
+      values.push(repo_values)
+    });
+    con.query(sql_insert, [values], (err, result) => {
+      if(err) {
+        console.log(err)
+        reject(err)
+      }
+      resolve(result)
+    })
+
   })
 }
 

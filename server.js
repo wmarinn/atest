@@ -11,12 +11,17 @@ const HOST = '0.0.0.0'
 
 process.env.VUE_APP_PORT = PORT // little trick so vue can see the env var
 
-const con = mysql.createConnection({
-  host: process.env.APP_ENV === 'dev' ? "db" : "us-cdbr-iron-east-05.cleardb.net",
-  user: process.env.APP_ENV === 'dev' ? "user" : "b2410c064cd71a",
-  password: process.env.APP_ENV === 'dev' ? "123456" : "05e06185",
-  database: process.env.APP_ENV === 'dev' ? "test_db" : "heroku_d98b70fed13d7b3"
-})
+let con = createConnection()
+
+function createConnection() {
+  let con = mysql.createConnection({
+    host: process.env.APP_ENV === 'dev' ? "db" : "us-cdbr-iron-east-05.cleardb.net",
+    user: process.env.APP_ENV === 'dev' ? "user" : "b2410c064cd71a",
+    password: process.env.APP_ENV === 'dev' ? "123456" : "05e06185",
+    database: process.env.APP_ENV === 'dev' ? "test_db" : "heroku_d98b70fed13d7b3"
+  })
+  return con
+}
 
 function connectDB() {
   con.connect(function(err) {
@@ -29,7 +34,8 @@ con.on('error', (err) => {
   if(!err.fatal) return
 
   if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-    connectDB()
+    con = createConnection() // refresh connection object
+    connectDB() // try to connect again
   }
 })
 

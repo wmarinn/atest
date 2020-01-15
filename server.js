@@ -63,7 +63,7 @@ app.post('/', (req, res) => {
                 "name varchar(100) not null, " +
                 "star_count int not null, " +
                 "url varchar(200) not null, " +
-                "created_at timestamp not null)"
+                "created_at timestamp not null default now())"
   con.query(sql_create_table, (err, result) => {
     if(err)
       if(err.code === 'ER_TABLE_EXISTS_ERROR')

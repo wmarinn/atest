@@ -1,10 +1,9 @@
 var chai  = require('chai')
-var request = require('request')
 var server = require('../server')
 
 
 it('post with incorrect data', function(done) {
-    request(server)
+    chai.request(server)
     .post('/')
     .end((err, res) => {
         res.should.have.status(200)
